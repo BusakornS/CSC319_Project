@@ -14,8 +14,9 @@ import java.awt.Color;
 
 public class Forest {
     private Cell[][] cell;
-    public int width, height, delay;
-    public double probCatch, probBurn, probTree;
+    private int width, height, delay;
+    private double probCatch, probBurn, probTree;
+    private boolean checkCellCannotFire[][];
     
     static int size = 7; // input size using Scanner
     static double[][] probBurning = new double[size][size];
@@ -121,6 +122,8 @@ public class Forest {
         // 1 : Tree
         // 2 : Fire burning
         cell =  new Cell[width][height];
+        checkCellCannotFire = new boolean[width][height];
+        checkFire();
         for (int i = 0; i < cell.length; i++) {
             for (int j = 0; j < cell[0].length; j++) {
                 // If it is the border of the forest, there is an empty space
@@ -132,6 +135,17 @@ public class Forest {
             }
         }
         cell[width / 2][height / 2] = new Cell(2);
+    }
+    
+    /**
+     * Set the boolean of every cell to false
+     */
+    public void checkFire() {
+        for (int i = 1; i < checkCellCannotFire.length - 1; i++) {
+            for (int j = 1; j < checkCellCannotFire.length - 1; j++) {
+                checkCellCannotFire[i][j] = false;
+            }
+        }
     }
     
     /**
@@ -147,11 +161,31 @@ public class Forest {
         return false;
     }
     
+    public void fireBurn(String direction, int x, int y) {
+        if (direction.equals("North") && getStatus(x - 1, y) == Cell.GREEN /*&& randomCatch(probCatch) == true*/) { // North
+            cell[x - 1][y].setStatus(2);
+            //checkCellCannotFire[x - 1][y] = true;
+        }
+        if (direction.equals("South") && getStatus(x + 1, y) == Cell.GREEN /*&& randomCatch(probCatch) == true*/) { // South
+            cell[x + 1][y].setStatus(2);
+            //checkCellCannotFire[x + 1][y] = true;
+        }
+        if (direction.equals("West") && getStatus(x, y - 1) == Cell.GREEN /*&& randomCatch(probCatch) == true*/) { // West
+            cell[x][y - 1].setStatus(2);
+            //checkCellCannotFire[x][y - 1] = true;
+        }
+        if (direction.equals("East") && getStatus(x, y + 1) == Cell.GREEN /*&& randomCatch(probCatch) == true*/) { // East
+            cell[x][y + 1].setStatus(2);
+            //cell[x][y + 1].setStatus(2);
+        }
+    }
+    
+     
     /**
      * Check if there is no burning anymore
      * @return true if there is burning tree in the forest
      */
-    public boolean allGone() {
+    public boolean alreadyBurn() {
         for (int i = 0; i < cell.length; i++) {
             for (int j = 0; j < cell[0].length; j++) {
                 if (getStatus(i, j) == Cell.RED) {
@@ -159,7 +193,7 @@ public class Forest {
                 }
             }
         }
-        return false;
+        return true;
     }
     
     /**
@@ -181,34 +215,27 @@ public class Forest {
          }
     }
     
-    public void fireBurn() {
-        for (int x = 0; x < cell.length; x++) {
-            for (int y = 0; y < cell[0].length; y++) {
-                if (cell[x - 1][y].getStatus() == Cell.GREEN) { // North
-                    cell[x - 1][y].setStatus(2);
-                }
-                if (cell[x + 1][y].getStatus() == Cell.GREEN) { // South
-                    cell[x + 1][y].setStatus(2);
-                }
-                if (cell[x][y - 1].getStatus() == Cell.GREEN) { // West
-                    cell[x][y - 1].setStatus(2);
-                }
-                if (cell[x][y + 1].getStatus() == Cell.GREEN) { // East
-                    cell[x][y + 1].setStatus(2);
-                }
-            }
-        }
-    }
-    
     public void spreading() {
-        try {
+        
+        /*try {
             if (!allGone()) {
-                fireBurn();
+                //fireBurn();
             }
             createForest();
             Thread.sleep(getDelay());
         } catch (InterruptedException e) {
             
+        }*/
+        for (int i = 0; i < cell.length - 1; i++) {
+            for (int j = 0; j < cell[0].length - 1; j++) {
+                if (getStatus(i, j) == Cell.RED /*&& checkCellCannotFire[i][j] == false*/) {
+                    cell[i][j].setStatus(0);
+                    fireBurn("North", i, j);
+                    fireBurn("South", i, j);
+                    fireBurn("West", i, j);
+                    fireBurn("East", i, j);
+                }
+            }
         }
     }
 
@@ -225,7 +252,6 @@ public class Forest {
     public int getDelay() {
         return this.delay;
     }
-
 }
     /*
         //if(x < 4 && y < 4) {
