@@ -14,23 +14,21 @@ import java.awt.Color;
 
 public class Forest {
     private Cell[][] cell;
-    private int width, height, delay;
-    private double probCatch, probBurn, probTree;
+    private View observer;
+    private int width, height;
+    private int probCatch, probBurn, probTree;
     private boolean checkCellCannotFire[][];
-    
-    static int size = 7; // input size using Scanner
-    static double[][] probBurning = new double[size][size];
-    int[][] fired = new int[size][size];
-    
+    private int step;
+
     /**
      * Constructor for create the forest
      */
     public Forest() {
-        this(30, 30, 50, 0, 100, 100);
+        this(30, 30, 50, 0, 100);
     }
     
     public Forest(int width, int height) {
-        this(width, height, 50, 0, 100, 100);
+        this(width, height, 50, 0, 100);
     }
     
     /**
@@ -42,13 +40,12 @@ public class Forest {
      * @param probT
      * @param delay
      */
-    public Forest(int width, int height, int probC, int probB, int probT, int delay) {
+    public Forest(int width, int height, int probC, int probB, int probT) {
         this.width = width;
         this.height = height;
         this.probCatch = probC;
         this.probBurn = probB;
         this.probTree = probT;
-        this.delay = delay;
         createForest();
     }
     
@@ -128,13 +125,28 @@ public class Forest {
             for (int j = 0; j < cell[0].length; j++) {
                 // If it is the border of the forest, there is an empty space
                 if (i == 0 || j == 0 || i == cell.length - 1 || j == cell[0].length - 1) {
-                    cell[i][j] = new Cell(0);
+                    cell[i][j] = new Cell(Cell.YELLOW);
                 } else {
-                    cell[i][j] = new Cell(1);
+                    if (random(probTree)) {
+                        if (random(probBurn)) {
+                            cell[i][j] = new Cell(Cell.RED);
+                        } else {
+                            cell[i][j] = new Cell(Cell.GREEN);
+                        }
+                    } else {
+                        cell[i][j] = new Cell(Cell.YELLOW);
+                    }
                 }
             }
         }
-        cell[width / 2][height / 2] = new Cell(2);
+        // Set the middle to be the starting point
+        cell[width / 2][height / 2] = new Cell(Cell.RED);
+        
+        // Reset step
+        step = 0;
+        
+        // Update the field
+        update();
     }
     
     /**
@@ -150,33 +162,33 @@ public class Forest {
     
     /**
      * Random number
-     * @param c
+     * @param r
      * @return boolean of random number
      */
-    public boolean randomCatch(double c) {
+    public boolean random(double r) {
         double rand = Math.random() * 100;
-        if (rand < c) {
+        if (rand < r) {
             return true;
         }
         return false;
     }
     
     public void fireBurn(String direction, int x, int y) {
-        if (direction.equals("North") && getStatus(x - 1, y) == Cell.GREEN /*&& randomCatch(probCatch) == true*/) { // North
-            cell[x - 1][y].setStatus(2);
-            //checkCellCannotFire[x - 1][y] = true;
+        if (direction.equals("North") && getStatus(x - 1, y) == Cell.GREEN && random(probCatch) == true) { // North
+            cell[x - 1][y].setStatus(Cell.RED);
+            checkCellCannotFire[x - 1][y] = true;
         }
-        if (direction.equals("South") && getStatus(x + 1, y) == Cell.GREEN /*&& randomCatch(probCatch) == true*/) { // South
-            cell[x + 1][y].setStatus(2);
-            //checkCellCannotFire[x + 1][y] = true;
+        if (direction.equals("South") && getStatus(x + 1, y) == Cell.GREEN && random(probCatch) == true) { // South
+            cell[x + 1][y].setStatus(Cell.RED);
+            checkCellCannotFire[x + 1][y] = true;
         }
-        if (direction.equals("West") && getStatus(x, y - 1) == Cell.GREEN /*&& randomCatch(probCatch) == true*/) { // West
-            cell[x][y - 1].setStatus(2);
-            //checkCellCannotFire[x][y - 1] = true;
+        if (direction.equals("West") && getStatus(x, y - 1) == Cell.GREEN && random(probCatch) == true) { // West
+            cell[x][y - 1].setStatus(Cell.RED);
+            checkCellCannotFire[x][y - 1] = true;
         }
-        if (direction.equals("East") && getStatus(x, y + 1) == Cell.GREEN /*&& randomCatch(probCatch) == true*/) { // East
+        if (direction.equals("East") && getStatus(x, y + 1) == Cell.GREEN && random(probCatch) == true) { // East
+            cell[x][y + 1].setStatus(Cell.RED);
             cell[x][y + 1].setStatus(2);
-            //cell[x][y + 1].setStatus(2);
         }
     }
     
@@ -215,21 +227,21 @@ public class Forest {
          }
     }
     
+    /**
+     * Search for the fire
+     */
     public void spreading() {
-        
-        /*try {
-            if (!allGone()) {
-                //fireBurn();
-            }
-            createForest();
-            Thread.sleep(getDelay());
-        } catch (InterruptedException e) {
-            
-        }*/
+        step++;
+        update();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
         for (int i = 0; i < cell.length - 1; i++) {
             for (int j = 0; j < cell[0].length - 1; j++) {
-                if (getStatus(i, j) == Cell.RED /*&& checkCellCannotFire[i][j] == false*/) {
-                    cell[i][j].setStatus(0);
+                if (getStatus(i, j) == Cell.RED && checkCellCannotFire[i][j] == false) {
+                    cell[i][j].setStatus(Cell.YELLOW);
                     fireBurn("North", i, j);
                     fireBurn("South", i, j);
                     fireBurn("West", i, j);
@@ -238,65 +250,25 @@ public class Forest {
             }
         }
     }
-
-    /*
-     * Set the delay time
+   
+    /**
+     * Add the observer for this model
+     * @param view
      */
-    public void setDelay(int delay) {
-        this.delay = delay;
+    public void addObserver(View view){
+        observer = view;
+        update();
     }
-    
-    /*
-     * Get the delay time
-     */
-    public int getDelay() {
-        return this.delay;
-    }
-}
-    /*
-        //if(x < 4 && y < 4) {
-        for(int i = 0 ; i < 6 ; i++){
-            for(int j = 0 ; j < 6 ; j++){
-                if(Jungle[i][j] == 2){
-                    Jungle[i][j] = 0;
-                }   
+     
+    /**
+     * Update this field
+     */ 
+    public void update() {
+        if (observer != null){
+            observer.update(cell);
+            if(!alreadyBurn()) {
+                observer.updateStep(step);
             }
         }
-        if(Jungle[x][y+1] == 1){
-            Jungle[x][y+1] = 2;
-        }
-            //if(y+1 < 6){
-                //fireBurn(x, y+1);
-            //}
-            //fired[x][y+1] = 1;
-            //fireBurn(x, y+1);
-        if(Jungle[x][y-1] == 1){
-            Jungle[x][y-1] = 2;
-        }
-            //if(y-1 > 0){
-              //  fireBurn(x, y-1);
-            //}
-            //fired[x][y-1] = 1;
-            //fireBurn(x, y-1);
-        if(Jungle[x-1][y] == 1){
-            Jungle[x-1][y] = 2;
-        }
-            //if(x-1 > 0){
-              //  fireBurn(x-1, y);
-            //}
-            //fired[x-1][y] = 1;
-            //fireBurn(x-1, y);
-        if(Jungle[x+1][y] == 1){
-            Jungle[x+1][y] = 2;
-        }
-            //if(x+1 < 6){
-              //  fireBurn(x+1, y);
-            //}
-            //fired[x+1][y] = 1;
-            //fireBurn(x+1, y);
-            //Jungle[x][y]=0;
-            printForest();
-        //}
     }
 }
-* */
