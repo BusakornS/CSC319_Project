@@ -18,6 +18,7 @@ public class SpreadingFire {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // JFrame project = new GUI();
         TUI();
     }
     
@@ -48,7 +49,7 @@ public class SpreadingFire {
             System.out.println("Step = " + step);
             forest.printForest();
             step++;
-            forest.createForest();
+            forest.resetForest();
         }
         System.out.println("Total step = " + (step - 1));
     }

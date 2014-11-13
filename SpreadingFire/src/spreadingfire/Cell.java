@@ -14,8 +14,11 @@ public class Cell {
     public static final int YELLOW = 0, GREEN = 1, RED = 2;
     private int status;
     
+    /**
+     * Constructor for create the empty cell
+     */
     public Cell() {
-        status = Cell.GREEN;
+        status = Cell.YELLOW;
     }
     
     /*
@@ -38,6 +41,14 @@ public class Cell {
      */
     public void setStatus(int status) {
         this.status = status;
+    }
+    
+    /**
+     * Check if the cell is empty
+     * @return true if the cell is empty
+     */
+    public boolean isEmpty() {
+        return status == YELLOW;
     }
     
     /**
