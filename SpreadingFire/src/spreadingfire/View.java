@@ -13,7 +13,7 @@ import javax.swing.*;
  */
 public class View extends JPanel {
     Cell cell[][];
-    int width, height;
+    int blockWidth, blockHeight;
     private int step;
     
     /**
@@ -26,7 +26,7 @@ public class View extends JPanel {
         g.fillRect(0, 0, 400, 400);
         
         // Calculate the border width
-        int border = (400 - (width * cell.length)) / 2;
+        int border = (400 - (blockWidth * cell.length)) / 2;
         
         // Do not paint if there is no cell
         if (cell == null) return;
@@ -34,10 +34,10 @@ public class View extends JPanel {
             for (int j = 0; j < cell[0].length; j++) {
                 // Paint the cell
                 g.setColor(cell[i][j].getColor());
-                g.fillRect(border + j * width, border + i * height, width, height);
+                g.fillRect(border + j * blockWidth, border + i * blockHeight, blockWidth, blockHeight);
                 // Paint the cell Border
                 g.setColor(Color.BLACK);
-                g.drawRect(border + j * width, border + i * height, width, height);
+                g.drawRect(border + j * blockWidth, border + i * blockHeight, blockWidth, blockHeight);
             }
         }
         
@@ -50,23 +50,23 @@ public class View extends JPanel {
     
     /**
      * Constructor - create the view panel
-     * @param width
-     * @param height
+     * @param blockWidth
+     * @param blockHeight
      */
-    public View(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public View(int blockWidth, int blockHeight) {
+        this.blockWidth = blockWidth;
+        this.blockHeight = blockHeight;
         cell = null;
     }
     
     /**
      * Set the block size
-     * @param width
-     * @param height
+     * @param blockWidth
+     * @param blockHeight
      */
-    public void setSize(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public void setSize(int blockWidth, int blockHeight) {
+        this.blockWidth = blockWidth;
+        this.blockHeight = blockHeight;
     }
     
     /**

@@ -49,7 +49,7 @@ public class Forest {
     
     /**
      * Set the fire probability of the forest
-     * @param probCatch
+     * @param probC
      */
     public void setProbCatch(int probC) {
         this.probCatch = probC;
@@ -57,7 +57,7 @@ public class Forest {
     
     /**
      * Set the burning probability of each tree
-     * @param probBurn
+     * @param probB
      */
     public void setProbBurn(int probB) {
         this.probBurn = probB;
@@ -65,7 +65,7 @@ public class Forest {
     
     /**
      * Set the density of tree in the forest
-     * @param probTree
+     * @param probT
      */
     public void setProbTree(int probT) {
         this.probTree = probT;
@@ -153,8 +153,8 @@ public class Forest {
      * Set the boolean of every cell to false
      */
     public void checkFire() {
-        for (int i = 1; i < checkCellCannotFire.length - 1; i++) {
-            for (int j = 1; j < checkCellCannotFire.length - 1; j++) {
+        for (int i = 0; i < checkCellCannotFire.length; i++) {
+            for (int j = 0; j < checkCellCannotFire[0].length; j++) {
                 checkCellCannotFire[i][j] = false;
             }
         }

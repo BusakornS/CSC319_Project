@@ -18,7 +18,7 @@ public class SpreadingFire {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // JFrame project = new GUI();
+        //JFrame project = new GUI();
         TUI();
     }
     
@@ -39,17 +39,17 @@ public class SpreadingFire {
         // Scanner density = new Scanner(System.in);
         // int probT = density.nextInt();
         
-        Forest forest = new Forest(width, height, probC, 0, 100);
+        Forest grid = new Forest(width, height, probC, 0, 100);
         
         System.out.println("Initial grid");
-        forest.printForest();
+        grid.printForest();
         int step = 1;
-        while (!forest.alreadyBurn()) {
-            forest.spreading();
+        while (!grid.alreadyBurn()) {
+            grid.spreading();
             System.out.println("Step = " + step);
-            forest.printForest();
+            grid.printForest();
             step++;
-            forest.resetForest();
+            grid.checkFire();
         }
         System.out.println("Total step = " + (step - 1));
     }
