@@ -23,7 +23,7 @@ public class SpreadingFire {
     }
     
     public static void TUI() {
-        System.out.println("Set the size of the forest (grid) : ");
+        System.out.println("Input the size of the forest : ");
         System.out.print("Width = ");
         Scanner w = new Scanner(System.in);
         int width = w.nextInt();
@@ -31,7 +31,7 @@ public class SpreadingFire {
         Scanner h = new Scanner(System.in);
         int height = h.nextInt();
         
-        System.out.println("Set the probability of a tree in a cell catching fire (0 - 100) : ");
+        System.out.println("Set the probability of tree in the cell catching fire (0 - 100) : ");
         Scanner probFireTree = new Scanner(System.in);
         int probC = probFireTree.nextInt();
         
