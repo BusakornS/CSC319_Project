@@ -36,7 +36,7 @@ public class Gui {
         // Get inputing size from user
          
         final JFrame frame = new JFrame("OOP");
-        frame.setSize(800,600);
+        frame.setSize(960,720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         
@@ -70,7 +70,7 @@ public class Gui {
             public void actionPerformed(ActionEvent e) {
                 forest.resetForest();
                 step=0;
-                text.setText("Count " + step);
+                text.setText("Count: " + step);
                 forest.validate();
                 forest.repaint();
                 frame.validate();
