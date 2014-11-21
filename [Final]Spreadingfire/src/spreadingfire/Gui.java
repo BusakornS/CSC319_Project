@@ -41,17 +41,19 @@ public class Gui {
         frame.setLayout(new BorderLayout());
         
         JPanel menu = new JPanel();
+        menu.setBackground(Color.PINK);
         JPanel btm = new JPanel();
+        btm.setBackground(Color.decode("#00EBFF"));
         
         ButtonGroup group = new ButtonGroup();
         
-        menu.add(manual);
-        menu.add(auto);   
-        menu.add(stop);
         group.add(numberOn);
         group.add(numberOff);
         menu.add(numberOn);
         menu.add(numberOff);
+        menu.add(manual);
+        menu.add(auto);   
+        menu.add(stop);
         menu.add(reset);
         menu.add(set);
         menu.add(exit);
@@ -161,11 +163,11 @@ public class Gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                
-               setsize = Integer.parseInt(JOptionPane.showInputDialog(null, "Input forest size"));
-               //defult C=50 B=0 T=100
-               probC = Integer.parseInt(JOptionPane.showInputDialog(null, "Input probCatch"));
-               probB = Integer.parseInt(JOptionPane.showInputDialog(null, "Input probBurn"));
-               probT = Integer.parseInt(JOptionPane.showInputDialog(null, "Input probTree"));
+               setsize = Integer.parseInt(JOptionPane.showInputDialog(null, "Input forest size(side^2)"));
+      
+               probC = Integer.parseInt(JOptionPane.showInputDialog(null, "Input probCatch(%)"));
+               probB = Integer.parseInt(JOptionPane.showInputDialog(null, "Input probBurn(%)"));
+               probT = Integer.parseInt(JOptionPane.showInputDialog(null, "Input probTree(%)"));
                
                
                

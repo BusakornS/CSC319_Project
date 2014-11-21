@@ -27,18 +27,11 @@ public class Forest extends JPanel {
     //    this(30, 30 , 50, 10, 100);
     //}
     
-    public Forest(int width, int height) {
-        this(width, height, 50, 0, 100);
+    public Forest() {
+       
     }
     
-    /**
-     * Constructor for create the grid
-     * @param width
-     * @param height
-     * @param probC
-     * @param probB
-     * @param probT
-     */
+    
     public Forest(int width, int height, int probC, int probB, int probT) {
         this.width = width;
         this.height = height;
