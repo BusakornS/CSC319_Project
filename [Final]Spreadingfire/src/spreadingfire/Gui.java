@@ -35,7 +35,7 @@ public class Gui {
     public static void main(String[] args) {
         // Get inputing size from user
          
-        final JFrame frame = new JFrame("OOP");
+        final JFrame frame = new JFrame("OOP : Fire Spreading Group2");
         frame.setSize(960,720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
