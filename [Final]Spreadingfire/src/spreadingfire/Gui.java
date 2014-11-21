@@ -67,6 +67,7 @@ public class Gui {
         frame.add(btm, BorderLayout.SOUTH);     
             
         frame.setVisible(true);
+        
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,6 +97,7 @@ public class Gui {
                             //System.out.println("Step = " + step);
                             step++;
                             text.setText("Count " + step);
+                            //debug
                             forest.printForest();
                             
                             forest.checkFire();

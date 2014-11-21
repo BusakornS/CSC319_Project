@@ -15,7 +15,6 @@ import javax.swing.JPanel;
  */
 public class Forest extends JPanel {
     private Cell[][] cell;
-    private View observer;
     private boolean checkCellCannotFire[][];
     public int width, height, probCatch, probBurn, probTree;
     private int step;
@@ -116,7 +115,7 @@ public class Forest extends JPanel {
         // 0 : Empty space
         // 1 : Tree
         // 2 : Fire burning
-        System.out.println("Reset");
+        
         cell =  new Cell[width][height];
         checkCellCannotFire = new boolean[width][height];
         checkFire();
@@ -269,12 +268,6 @@ public class Forest extends JPanel {
      * Update this field
      */ 
     public void update() {
-        if (observer != null){
-            observer.update(cell);
-            if(!alreadyBurn()) {
-                observer.updateStep(step);
-            }
-        }
         this.validate();
         this.repaint();
 
